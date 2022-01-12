@@ -1,23 +1,44 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, AfterLoad } from 'typeorm'
+import { hash } from 'bcryptjs'
 
-@Entity()
+@Entity({ name: 'users' })
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column()
-    firstName: string;
+  @Column()
+  firstName: string
 
-    @Column()
-    lastName: string;
+  @Column()
+  lastName: string
 
-    @Column()
-    age: number;
+  @Column({ unique: true, nullable: false })
+  email: string
+
+  @Column({ nullable: false })
+  password: string
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
+
+  @Column()
+  passwordUpdatedAt: Date
+
+  private prevPassword: string
+
+  @AfterLoad()
+  private cacheOldPassword () {
+    this.prevPassword = this.password
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async hashPassword () {
+    if (this.password === this.prevPassword) return
+    this.password = await hash(this.password, 12)
+    this.passwordUpdatedAt = new Date()
+  }
 }
-// todo
-/**
- * pluralize db tables
- * psql not showing correct user table?
- * connect typeorm to server
- * setup auth
- */
