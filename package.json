@@ -32,10 +32,12 @@
       "apollo-server": "^3.6.1",
       "apollo-server-core": "^3.6.1",
       "bcryptjs": "^2.4.3",
+      "class-validator": "^0.13.2",
       "dotenv": "^10.0.0",
-      "graphql": "^16.2.0",
+      "graphql": "^15.3.0",
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.10",
+      "type-graphql": "^1.1.1",
       "typeorm": "0.2.41"
    }
 }
